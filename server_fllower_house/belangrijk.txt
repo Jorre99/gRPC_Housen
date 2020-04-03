@@ -1,0 +1,17 @@
+belangrijk cmd:
+python -m grpc_tools.protoc -I./proto --python_out=. --grpc_python_out=. ./proto/HouseServer.proto
+
+
+GRPC SERVER    
+
+
+
+
+def message(self, request, context):
+        self.counter += 1
+        if self.counter > 10000:
+            print('10000 calls in %3f seconds' %
+                  (time.time() - self.lastPrintTime))
+            self.lastPrintTime = time.time()
+            self.counter = 0
+        return HouseServer_pb2._message
