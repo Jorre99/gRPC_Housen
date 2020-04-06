@@ -15,12 +15,14 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
 
     def CreateStream(self, request, context):
         with self.client_lock:
+            print('new client')
             new_client = Connection(self)
             self.clients.append(new_client)
             return new_client
 
     def BroadcastMessage(self, request, context):
         with self.client_lock:
+            print(f'broadcasting to {len(self.clients)} clients')
             for client in self.clients:
                 client.sendmsg(request)
             print(request)
@@ -28,6 +30,7 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
 
     def delete(self, connection):
         with self.client_lock:
+            print(f'removing {connection}')
             self.clients.remove(connection)
 
 
@@ -66,7 +69,7 @@ class Connection:
 
 
 def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=20))
     HouseServer_pb2_grpc.add_BroadcastServicer_to_server(Listener(), server)
     server.add_insecure_port('[::]:5050')
     server.start()
