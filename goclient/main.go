@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"flag"
+	"fmt"
 	"io"
 	"log"
 	"time"
@@ -14,7 +16,9 @@ import (
 )
 
 var (
-	address = "dns-srv:///grpclb|tcp|chatter.housen.tech" // This is an SRV dns record. service|proto|name.
+	username = flag.String("user", "\\o/", "The username to login with.")
+	friend   = flag.String("friend", "/o/", "Your friend which you'd like to have some chatter with.")
+	address  = "dns-srv:///grpclb|tcp|chatter.housen.tech" // This is an SRV dns record. service|proto|name.
 )
 
 // Gouser implements the chat client state.
@@ -58,7 +62,7 @@ func (g *Gouser) Run() {
 				ui.Close()
 				return
 			case "<Enter>":
-				g.server.BroadcastMessage(context.Background(), &chatpb.Message{Content: g.inputP.Text})
+				g.server.BroadcastMessage(context.Background(), &chatpb.Message{Content: g.inputP.Text, PeerUser: *username})
 				g.inputP.Text = ""
 				ui.Render(g.inputP)
 			case "<Space>":
@@ -83,7 +87,7 @@ Outer:
 	for {
 		g.chatP.Text += "Creating connection...\n"
 		ui.Render(g.chatP)
-		stream, err := g.server.CreateStream(context.Background(), &chatpb.Connect{})
+		stream, err := g.server.CreateStream(context.Background(), &chatpb.Connect{User: &chatpb.User{Name: *username}})
 		if err != nil {
 			g.chatP.Text += err.Error()
 			g.chatP.Text += "\n"
@@ -104,8 +108,7 @@ Outer:
 				ui.Render(g.chatP)
 				break Inner
 			}
-			g.chatP.Text += resp.GetContent()
-			g.chatP.Text += "\n"
+			g.chatP.Text += fmt.Sprintf("%s: %s\n", resp.GetPeerUser(), resp.GetContent())
 			ui.Render(g.chatP)
 		}
 	}
@@ -117,7 +120,6 @@ func mainWith(ctx context.Context) error {
 		return err
 	}
 	defer conn.Close()
-	log.Printf("connected to: %s", conn.Target())
 
 	client := chatpb.NewBroadcastClient(conn)
 	g, err := NewGouser(client)

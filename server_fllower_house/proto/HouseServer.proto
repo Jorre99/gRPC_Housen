@@ -11,6 +11,8 @@ message Message {
     string id = 1;
     string content = 2;
     string timestamp = 3;
+
+    // peer_user is the sender of the message.
     string peer_user = 4;
 }
 
