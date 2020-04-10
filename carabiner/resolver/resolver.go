@@ -1,4 +1,7 @@
 // Package resolver implements an SRV resolver for gRPC.
+// The schema is dns-srv.
+// The format of the Endpoint looks like this: service|protocol|name.
+// These values are used with net.LookupSRV to get a list of SRV records.
 package resolver
 
 import (

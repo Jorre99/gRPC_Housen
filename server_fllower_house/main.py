@@ -22,7 +22,7 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
 
     def BroadcastMessage(self, request, context):
         with self.client_lock:
-            print(f'broadcasting to {len(self.clients)} clients')
+            print('broadcasting to {} clients'.format(len(self.clients)))
             for client in self.clients:
                 client.sendmsg(request)
             print(request)
@@ -30,7 +30,7 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
 
     def delete(self, connection):
         with self.client_lock:
-            print(f'removing {connection}')
+            print('removing {}'.format(connection))
             self.clients.remove(connection)
 
 
