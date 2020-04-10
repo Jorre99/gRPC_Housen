@@ -1,5 +1,7 @@
 package main
 
+//go:generate protoc -I ../server_fllower_house/proto/ ../server_fllower_house/proto/HouseServer.proto --go_out=plugins=grpc:../server_fllower_house/proto
+
 import (
 	"context"
 	"fmt"
