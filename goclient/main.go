@@ -4,7 +4,9 @@ import (
 	"context"
 	"io"
 	"log"
+	"time"
 
+	_ "github.com/Jorre99/gRPC_Housen/goclient/resolver"
 	chatpb "github.com/Jorre99/gRPC_Housen/server_fllower_house/proto"
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
@@ -12,15 +14,17 @@ import (
 )
 
 var (
-	address = "localhost:5050"
+	address = "dns-srv:///grpclb|tcp|chatter.housen.tech" // This is an SRV dns record. service|proto|name.
 )
 
+// Gouser implements the chat client state.
 type Gouser struct {
 	server chatpb.BroadcastClient
 	chatP  *widgets.Paragraph
 	inputP *widgets.Paragraph
 }
 
+// NewGouser creates a new Gouser.
 func NewGouser(server chatpb.BroadcastClient) (*Gouser, error) {
 	if err := ui.Init(); err != nil {
 		return nil, err
@@ -42,6 +46,7 @@ func NewGouser(server chatpb.BroadcastClient) (*Gouser, error) {
 	return g, nil
 }
 
+// Run starts the event loop and runs the client.
 func (g *Gouser) Run() {
 	go g.ListenForMessages()
 	evs := ui.PollEvents()
@@ -72,6 +77,7 @@ func (g *Gouser) Run() {
 	}
 }
 
+// ListenForMessages perpetually connects to the gateway and writes new messages to the chat pane.
 func (g *Gouser) ListenForMessages() {
 Outer:
 	for {
@@ -106,11 +112,12 @@ Outer:
 }
 
 func mainWith(ctx context.Context) error {
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock(), grpc.WithTimeout(50*time.Second))
 	if err != nil {
 		return err
 	}
 	defer conn.Close()
+	log.Printf("connected to: %s", conn.Target())
 
 	client := chatpb.NewBroadcastClient(conn)
 	g, err := NewGouser(client)
