@@ -3,8 +3,16 @@ Grpc Server-clients
 
 ## goclient
 
+### Install
+
+`$ go install github.com/Jorre99/gRPC_Housen/carabiner`
+
+### Use
+
 ```
-# user should be your own username.
-# friend should be the user you want to chat with.
-$ go run goclient/main.go --user=${user} --friend=${friend}
+$ export CHATTER_USER=${user}  # Your own username.
+$ export CHATTER_FRIEND=${friend}  # Person you want to chat with.
+$ carabiner 
 ```
+
+You can use the `CHATTER_SERVER` environment variable to select a server.

@@ -2,7 +2,6 @@
 package resolver
 
 import (
-	"fmt"
 	"net"
 	"strconv"
 	"strings"
@@ -47,7 +46,6 @@ type Resolver struct {
 }
 
 func (r *Resolver) watch() {
-	fmt.Println("\\o/ watch")
 	for {
 		select {
 		case <-time.After(time.Minute):
