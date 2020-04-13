@@ -7,11 +7,13 @@ from server_fllower_house.proto import HouseServer_pb2
 
 
 def run():
-    with grpc.insecure_channel('localhost:5050') as channel:
+    with grpc.insecure_channel('bink.us-east.chatter.housen.tech:5050') as channel:
         stub = HouseServer_pb2_grpc.BroadcastStub(channel)
-        response1 = stub.BroadcastMessage(HouseServer_pb2.Message(id=input("uw naam: ")))
+        id=input("uw naam: ")
+        peer_user=input("na wie wil je een berricht sturen? ")
         while True:
-            response = stub.BroadcastMessage(HouseServer_pb2.Message(content=input("type your message: ")))
+            response = stub.BroadcastMessage(HouseServer_pb2.Message(content=input("type your message: "),
+                                                                     id=id, peer_user=peer_user))
 
 
 if __name__ == '__main__':

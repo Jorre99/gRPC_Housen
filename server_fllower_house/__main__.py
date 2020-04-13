@@ -28,7 +28,7 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
 
     def BroadcastMessage(self, message, context):
         with self.client_lock:
-            print('sending to {} clients'.format(message.peer_user))
+            print('sending to {}'.format(message.peer_user))
             if message.peer_user in self.clients:
                 self.clients[message.peer_user].sendmsg(message)
                 return HouseServer_pb2.Close()

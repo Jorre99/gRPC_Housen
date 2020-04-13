@@ -10,7 +10,7 @@ def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
-    with grpc.insecure_channel('localhost:5050') as channel:
+    with grpc.insecure_channel("bink.us-east.chatter.housen.tech:5050") as channel:
         stub = HouseServer_pb2_grpc.BroadcastStub(channel)
         stream = stub.CreateStream(HouseServer_pb2.Connect(id=input("your name: ")))
 
