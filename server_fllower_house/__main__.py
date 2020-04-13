@@ -6,6 +6,10 @@ import time
 import threading
 
 
+# run from gRPC_Housen
+# generate proto: python3 -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. server_fllower_house/proto/HouseServer.proto
+
+
 class Listener(HouseServer_pb2_grpc.BroadcastServicer):
     def __init__(self):
         self.counter = 0
@@ -17,7 +21,7 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
         with self.client_lock:
             print('new client', connect.id)
             if connect.id in self.clients:
-                return False
+                return []
             new_client = Connection(self, connect.id)
             self.clients[connect.id] = new_client
             return new_client
@@ -28,7 +32,7 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
             if message.peer_user in self.clients:
                 self.clients[message.peer_user].sendmsg(message)
                 return HouseServer_pb2.Close()
-            for client in self.clients:
+            for client in self.clients.values():
                 client.sendmsg(message)
             print(message)
             return HouseServer_pb2.Close()
