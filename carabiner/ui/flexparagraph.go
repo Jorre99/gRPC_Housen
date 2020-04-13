@@ -2,6 +2,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/gizak/termui/v3/widgets"
 )
 
@@ -20,5 +22,11 @@ func NewFlexParagraph() *FlexParagraph {
 // AddLine adds a line of text to the Paragraph.
 func (f *FlexParagraph) AddLine(l string) {
 	f.Rows = append(f.Rows, l)
+	f.ScrollDown()
+}
+
+// AddLinef adds a line of text to the Paragraph.
+func (f *FlexParagraph) AddLinef(format string, i ...interface{}) {
+	f.Rows = append(f.Rows, fmt.Sprintf(format, i...))
 	f.ScrollDown()
 }

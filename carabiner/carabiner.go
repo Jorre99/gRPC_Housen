@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/Jorre99/gRPC_Housen/carabiner/backoff"
 	_ "github.com/Jorre99/gRPC_Housen/carabiner/resolver"
 	"github.com/Jorre99/gRPC_Housen/carabiner/ui"
 	chatpb "github.com/Jorre99/gRPC_Housen/server_fllower_house/proto"
@@ -70,7 +71,7 @@ func (g *Gouser) Run() {
 				termui.Close()
 				return
 			case "<Enter>":
-				g.server.BroadcastMessage(context.Background(), &chatpb.Message{Content: g.inputP.Text, PeerUser: username})
+				g.server.BroadcastMessage(context.Background(), &chatpb.Message{Content: g.inputP.Text, Id: username, PeerUser: friend})
 				g.inputP.Text = ""
 				termui.Render(g.inputP)
 			case "<Space>":
@@ -130,16 +131,21 @@ func (g *Gouser) resize() {
 
 // ListenForMessages perpetually connects to the gateway and writes new messages to the chat pane.
 func (g *Gouser) ListenForMessages() {
+	backoff := backoff.NewBackoff(time.Second, time.Minute, 2)
 Outer:
 	for {
 		g.chatP.AddLine("Creating connection...")
 		termui.Render(g.chatP)
-		stream, err := g.server.CreateStream(context.Background(), &chatpb.Connect{User: &chatpb.User{Name: username}})
+		stream, err := g.server.CreateStream(context.Background(), &chatpb.Connect{Id: username})
 		if err != nil {
 			g.chatP.AddLine(err.Error())
+			g.chatP.AddLinef("sleeping %s before retrying", backoff.Get())
 			termui.Render(g.chatP)
+			time.Sleep(backoff.Get())
+			backoff.Incr()
 			continue Outer
 		}
+		backoff.Reset()
 	Inner:
 		for {
 			resp, err := stream.Recv()
@@ -153,14 +159,14 @@ Outer:
 				termui.Render(g.chatP)
 				break Inner
 			}
-			g.chatP.AddLine(fmt.Sprintf("%s|%s: %s", time.Now().Format("15:04:05"), resp.GetPeerUser(), resp.GetContent()))
+			g.chatP.AddLine(fmt.Sprintf("%s|%s: %s", time.Now().Format("15:04:05"), resp.GetId(), resp.GetContent()))
 			termui.Render(g.chatP)
 		}
 	}
 }
 
 func mainWith(ctx context.Context) error {
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		return err
 	}
