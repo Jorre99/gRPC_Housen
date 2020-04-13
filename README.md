@@ -16,3 +16,20 @@ $ carabiner
 ```
 
 You can use the `CHATTER_SERVER` environment variable to select a server.
+
+## JavaClient
+
+###Generate Proto
+
+````
+$ protoc -I . --java_out=server_fllower_house server_fllower_house/proto/HouseServer.proto
+
+````
+
+## Python Server
+
+###Generate Proto
+
+````
+$ python3 -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. server_fllower_house/proto/HouseServer.proto
+````

@@ -7,8 +7,6 @@ import threading
 
 
 # run from gRPC_Housen
-# generate proto: python3 -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. server_fllower_house/proto/HouseServer.proto
-
 
 class Listener(HouseServer_pb2_grpc.BroadcastServicer):
     def __init__(self):
@@ -64,7 +62,7 @@ class Connection:
             if self.quitting:
                 raise StopIteration()
             self.timer.cancel()
-            self.timer = threading.Timer(15, self.quit)
+            self.timer = threading.Timer(60*60, self.quit)
             self.timer.start()
             return self.messages.pop(0)
 
