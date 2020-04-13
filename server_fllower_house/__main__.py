@@ -32,8 +32,9 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
             if message.peer_user in self.clients:
                 self.clients[message.peer_user].sendmsg(message)
                 return HouseServer_pb2.Close()
-            for client in self.clients.values():
-                client.sendmsg(message)
+            for connectionid, client in self.clients.items():
+                if not connectionid == message.id:
+                    client.sendmsg(message)
             print(message)
             return HouseServer_pb2.Close()
 
