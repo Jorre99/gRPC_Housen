@@ -1,7 +1,7 @@
 from concurrent import futures
 import grpc
-import HouseServer_pb2
-import HouseServer_pb2_grpc
+from server_fllower_house.proto import HouseServer_pb2_grpc
+from server_fllower_house.proto import HouseServer_pb2
 import time
 import threading
 
@@ -20,12 +20,12 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
             self.clients.append(new_client)
             return new_client
 
-    def BroadcastMessage(self, request, context):
+    def BroadcastMessage(self, message, context):
         with self.client_lock:
             print('broadcasting to {} clients'.format(len(self.clients)))
             for client in self.clients:
-                client.sendmsg(request)
-            print(request)
+                client.sendmsg(message)
+            print(message)
             return HouseServer_pb2.Close()
 
     def delete(self, connection):

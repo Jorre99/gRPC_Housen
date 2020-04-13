@@ -18,48 +18,10 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='proto',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x11HouseServer.proto\x12\x05proto\" \n\x04User\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"L\n\x07Message\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\x11\n\ttimestamp\x18\x03 \x01(\t\x12\x11\n\tpeer_user\x18\x04 \x01(\t\"4\n\x07\x43onnect\x12\x19\n\x04user\x18\x01 \x01(\x0b\x32\x0b.proto.User\x12\x0e\n\x06\x61\x63tive\x18\x02 \x01(\x08\"\x07\n\x05\x43lose2o\n\tBroadcast\x12\x30\n\x0c\x43reateStream\x12\x0e.proto.Connect\x1a\x0e.proto.Message0\x01\x12\x30\n\x10\x42roadcastMessage\x12\x0e.proto.Message\x1a\x0c.proto.Closeb\x06proto3'
+  serialized_pb=b'\n\x11HouseServer.proto\x12\x05proto\"9\n\x07Message\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\x11\n\tpeer_user\x18\x04 \x01(\t\"\x15\n\x07\x43onnect\x12\n\n\x02id\x18\x01 \x01(\t\"\x07\n\x05\x43lose2o\n\tBroadcast\x12\x30\n\x0c\x43reateStream\x12\x0e.proto.Connect\x1a\x0e.proto.Message0\x01\x12\x30\n\x10\x42roadcastMessage\x12\x0e.proto.Message\x1a\x0c.proto.Closeb\x06proto3'
 )
 
 
-
-
-_USER = _descriptor.Descriptor(
-  name='User',
-  full_name='proto.User',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='proto.User.id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='proto.User.name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=28,
-  serialized_end=60,
-)
 
 
 _MESSAGE = _descriptor.Descriptor(
@@ -84,14 +46,7 @@ _MESSAGE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='timestamp', full_name='proto.Message.timestamp', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='peer_user', full_name='proto.Message.peer_user', index=3,
+      name='peer_user', full_name='proto.Message.peer_user', index=2,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -109,8 +64,8 @@ _MESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=62,
-  serialized_end=138,
+  serialized_start=28,
+  serialized_end=85,
 )
 
 
@@ -122,16 +77,9 @@ _CONNECT = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='user', full_name='proto.Connect.user', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='active', full_name='proto.Connect.active', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='id', full_name='proto.Connect.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -147,8 +95,8 @@ _CONNECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=140,
-  serialized_end=192,
+  serialized_start=87,
+  serialized_end=108,
 )
 
 
@@ -171,23 +119,14 @@ _CLOSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=194,
-  serialized_end=201,
+  serialized_start=110,
+  serialized_end=117,
 )
 
-_CONNECT.fields_by_name['user'].message_type = _USER
-DESCRIPTOR.message_types_by_name['User'] = _USER
 DESCRIPTOR.message_types_by_name['Message'] = _MESSAGE
 DESCRIPTOR.message_types_by_name['Connect'] = _CONNECT
 DESCRIPTOR.message_types_by_name['Close'] = _CLOSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
-User = _reflection.GeneratedProtocolMessageType('User', (_message.Message,), {
-  'DESCRIPTOR' : _USER,
-  '__module__' : 'HouseServer_pb2'
-  # @@protoc_insertion_point(class_scope:proto.User)
-  })
-_sym_db.RegisterMessage(User)
 
 Message = _reflection.GeneratedProtocolMessageType('Message', (_message.Message,), {
   'DESCRIPTOR' : _MESSAGE,
@@ -218,8 +157,8 @@ _BROADCAST = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=203,
-  serialized_end=314,
+  serialized_start=119,
+  serialized_end=230,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateStream',
