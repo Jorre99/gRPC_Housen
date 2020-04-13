@@ -21,7 +21,7 @@ class Listener(HouseServer_pb2_grpc.BroadcastServicer):
         with self.client_lock:
             print('new client', connect.id)
             if connect.id in self.clients:
-                return []
+                return [].iter()
             new_client = Connection(self, connect.id)
             self.clients[connect.id] = new_client
             return new_client
