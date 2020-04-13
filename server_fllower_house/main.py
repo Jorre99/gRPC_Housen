@@ -9,39 +9,46 @@ import threading
 class Listener(HouseServer_pb2_grpc.BroadcastServicer):
     def __init__(self):
         self.counter = 0
-        self.clients = []
+        self.clients = {}
         self.client_lock = threading.Lock()
         self.lastPrintTime = time.time()
 
-    def CreateStream(self, request, context):
+    def CreateStream(self, connect, context):
         with self.client_lock:
-            print('new client')
-            new_client = Connection(self)
-            self.clients.append(new_client)
+            print('new client', connect.id)
+            if connect.id in self.clients:
+                return False
+            new_client = Connection(self, connect.id)
+            self.clients[connect.id] = new_client
             return new_client
 
     def BroadcastMessage(self, message, context):
         with self.client_lock:
-            print('broadcasting to {} clients'.format(len(self.clients)))
+            print('sending to {} clients'.format(message.peer_user))
+            if message.peer_user in self.clients:
+                self.clients[message.peer_user].sendmsg(message)
+                return HouseServer_pb2.Close()
             for client in self.clients:
                 client.sendmsg(message)
             print(message)
             return HouseServer_pb2.Close()
 
-    def delete(self, connection):
+    def delete(self, connection_id):
         with self.client_lock:
-            print('removing {}'.format(connection))
-            self.clients.remove(connection)
+            print('removing {}'.format(connection_id))
+            del self.clients[connection_id]
+            # self.clients.remove(connection)
 
 
 class Connection:
-    def __init__(self, listener):
+    def __init__(self, listener, id):
         self.cond = threading.Condition()
         self.messages = []
         self.listener = listener
         self.timer = threading.Timer(15, self.quit)
         self.timer.start()
         self.quitting = False
+        self.id = id
 
     def __iter__(self):
         return self
@@ -62,7 +69,7 @@ class Connection:
             self.cond.notify()
 
     def quit(self):
-        self.listener.delete(self)
+        self.listener.delete(self.id)
         with self.cond:
             self.quitting = True
             self.cond.notify()
