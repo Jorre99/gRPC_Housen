@@ -72,8 +72,9 @@ func (g *Gouser) Run() {
 				return
 			case "<Enter>":
 				g.server.BroadcastMessage(context.Background(), &chatpb.Message{Content: g.inputP.Text, Id: username, PeerUser: friend})
+				g.chatP.AddLine(fmt.Sprintf("%s | %s: %s", time.Now().Format("15:04:05"), username, g.inputP.Text))
 				g.inputP.Text = ""
-				termui.Render(g.inputP)
+				termui.Render(g.inputP, g.chatP)
 			case "<Space>":
 				g.inputP.Text += " "
 				termui.Render(g.inputP)
