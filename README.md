@@ -37,6 +37,15 @@ $ protoc -I . --java_out=server_fllower_house server_fllower_house/proto/HouseSe
 ```
 $ python3 -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. server_fllower_house/proto/HouseServer.proto
 ```
+
+### Install
+
+```
+$ git clone https://github.com/Jorre99/gRPC_Housen.git
+$ cd gRPC_Housen
+$ pipenv install
+```
+
 ### Run
 
 `$ pipenv run python3 -m server_fllower_house`
