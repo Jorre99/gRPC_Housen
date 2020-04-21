@@ -36,4 +36,7 @@ jobs:
         fi
 
     - name: Build
-      run: go build -v .
+      run: go build -v $REPO/...
+      
+    - name: Test
+      run: go test -v $REPO/...
